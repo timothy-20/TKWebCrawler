@@ -62,6 +62,12 @@ task deleteVueBuildFiles(type: Delete) {
     delete "src/main/resources/static/static", "src/main/resources/static/index.html", "${project.projectDir}/vue-project/node_modules"
 }
 
+task npmBuild(type: NpmTask, dependsOn: ['deleteVueBuildFiles', 'npmInstall']) {
+    args=["run", "build"]
+}
+
+processResources.dependsOn 'npmBuild'
+
 tasks.named('test') {
     useJUnitPlatform()
 }
