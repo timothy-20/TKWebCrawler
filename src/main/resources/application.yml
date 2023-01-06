@@ -1,0 +1,28 @@
+server:
+  port: 8787
+
+#spring:
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/springboot-jpa?serverTimezone=UTC&characterEncoding=UTF-8
+#    username: root
+#    password: root1234
+#
+#  h2:
+#    console:
+#      enabled: true
+#
+#  jpa:
+#    hibernate:
+#      ddl-auto: create
+#    properties:
+#      hibernate:
+##        show_sql: true
+#        format_sql: true
+#        default_batch_fetch_size: 100
+#    generate-ddl: true
+#
+#logging:
+#  level:
+#    org.hibernate.sql: debug
+#    org.hibernate.type: trace
