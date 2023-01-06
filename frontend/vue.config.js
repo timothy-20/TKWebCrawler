@@ -11,9 +11,6 @@ module.exports = defineConfig({
         "@store": path.resolve(__dirname, "src/store")
       },
     },
-    // build: {
-    //   index: path.resolve(__dirname, "")
-    // }
   },
   transpileDependencies: true,
   lintOnSave: false,
@@ -22,5 +19,5 @@ module.exports = defineConfig({
   },
   indexPath: "../../templates/vue/index.html",
   publicPath: "/vue",
-  outputDir: path.resolve(__dirname, "../backend/src/main/resources/static/vue")
-})
+  outputDir: path.resolve(__dirname, "../src/main/resources/static/vue")
+});

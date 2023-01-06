@@ -18,7 +18,7 @@
       <div class="info-wrapper">
         <div class="info">
           <div class="info-row info-head">
-            <div>NO.</div>
+            <div>NdO.</div>
             <div>Category</div>
             <div>Name</div>
             <div>Code</div>
@@ -55,7 +55,6 @@
 
 <script>
 import axios from "axios";
-// import * as webdriver from "selenium-webdriver";
 
 export default {
   name: "TKHomePage",
@@ -87,18 +86,26 @@ export default {
     },
 
     getTargetHTML() {
-      let parsedURLArray = this.getURL();
+      axios.get("/packageName").then( function (data) {
+        console.log(data);
+        // this.targetURL = ;
 
-      if (parsedURLArray === null) {
-        return;
-      }
+      }).catch(function (error) {
+         console.log(error);
+      });
 
-      this.parsedURL = parsedURLArray[0];
-      this.parsedQuery = this.getQuery();
-
-      if (this.targetURL.length > 0) {
-
-      }
+      // let parsedURLArray = this.getURL();
+      //
+      // if (parsedURLArray === null) {
+      //   return;
+      // }
+      //
+      // this.parsedURL = parsedURLArray[0];
+      // this.parsedQuery = this.getQuery();
+      //
+      // if (this.targetURL.length > 0) {
+      //
+      // }
     },
 
     actionSubmit() {

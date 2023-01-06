@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id 'war'
+    id 'com.github.node-gradle.node' version '3.0.1'
     id 'org.springframework.boot' version '3.0.1'
     id 'io.spring.dependency-management' version '1.1.0'
 }
@@ -8,8 +10,26 @@ group = 'com.timothy20'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
+node {
+    download = true
+    version="14.17.6"
+    npmVersion="6.14.15"
+    distBaseUrl="https://nodejs.org/dist"
+    npmInstallCommand="install"
+    workDir=file("${project.projectDir}/.gradle/nodejs")
+    npmWorkDir=file("${project.projectDir}/.gradle/npm")
+    nodeProxySettings=ProxySettings.SMART
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
 repositories {
     mavenCentral()
+    gradlePluginPortal()
 }
 
 dependencies {
@@ -34,6 +54,12 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+apply plugin: "com.github.node-gradle.node"
+
+task deleteVueBuildFiles(type: Delete) {
+    delete "src/main/resources/static/static", "src/main/resources/static/index.html", "${project.projectDir}/vue-project/node_modules"
 }
 
 tasks.named('test') {
