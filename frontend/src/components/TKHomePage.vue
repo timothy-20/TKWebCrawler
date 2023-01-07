@@ -18,7 +18,7 @@
       <div class="info-wrapper">
         <div class="info">
           <div class="info-row info-head">
-            <div>NdO.</div>
+            <div>NO.</div>
             <div>Category</div>
             <div>Name</div>
             <div>Code</div>

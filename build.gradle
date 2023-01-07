@@ -18,6 +18,7 @@ node {
     npmInstallCommand="install"
     workDir=file("${project.projectDir}/.gradle/nodejs")
     npmWorkDir=file("${project.projectDir}/.gradle/npm")
+    nodeProjectDir=file("${project.projectDir}/frontend")
     nodeProxySettings=ProxySettings.SMART
 }
 
@@ -59,7 +60,7 @@ dependencies {
 apply plugin: "com.github.node-gradle.node"
 
 task deleteVueBuildFiles(type: Delete) {
-    delete "src/main/resources/static/static", "src/main/resources/static/index.html", "${project.projectDir}/vue-project/node_modules"
+    delete "src/main/resources/static/vue", "src/main/resources/static/template/vue/index.html", "${project.projectDir}/frontend/node_modules"
 }
 
 task npmBuild(type: NpmTask, dependsOn: ['deleteVueBuildFiles', 'npmInstall']) {

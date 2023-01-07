@@ -2,6 +2,12 @@ const { defineConfig } = require("@vue/cli-service")
 const path = require("path");
 
 module.exports = defineConfig({
+  publicPath: "/vue",
+  outputDir: path.resolve(__dirname, "../src/main/resources/static/vue"),
+  indexPath: "../../templates/vue/index.html",
+  devServer: {
+    proxy: "http://localhost:8787"
+  },
   configureWebpack: {
     resolve: {
       alias: {
@@ -13,11 +19,5 @@ module.exports = defineConfig({
     },
   },
   transpileDependencies: true,
-  lintOnSave: false,
-  devServer: {
-    proxy: "http://localhost:8787"
-  },
-  indexPath: "../../templates/vue/index.html",
-  publicPath: "/vue",
-  outputDir: path.resolve(__dirname, "../src/main/resources/static/vue")
+  lintOnSave: false
 });
