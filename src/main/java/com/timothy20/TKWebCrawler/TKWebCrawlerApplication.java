@@ -8,6 +8,7 @@ public class TKWebCrawlerApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(com.timothy20.TKWebCrawler.TKWebCrawlerApplication.class, args);
+
     }
 
 }
