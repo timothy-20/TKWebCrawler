@@ -86,12 +86,11 @@ export default {
     },
 
     getTargetHTML() {
-      axios.get("/packageName").then( function (data) {
-        console.log(data);
-        // this.targetURL = ;
+      axios.post("receive_target_url", this.targetURL).then(response => {
+        console.log(response);
 
-      }).catch(function (error) {
-         console.log(error);
+      }).catch(error => {
+        console.log(error);
       });
 
       // let parsedURLArray = this.getURL();

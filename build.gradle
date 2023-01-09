@@ -36,7 +36,6 @@ repositories {
 dependencies {
     // springboot 기본 설정
     implementation 'org.springframework.boot:spring-boot-starter'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -48,13 +47,18 @@ dependencies {
     implementation 'junit:junit:4.13.2'
     runtimeOnly 'com.h2database:h2'
 
-    // mysql 연동
-    runtimeOnly 'mysql:mysql-connector-java'
+    // database
+    implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '3.1.0'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.1'
+//    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
-    // lombok 사용
+    // lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // selenium
+    implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '4.7.2'
 }
 
 apply plugin: "com.github.node-gradle.node"
