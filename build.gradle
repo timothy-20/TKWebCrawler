@@ -49,8 +49,9 @@ dependencies {
 
     // database
     implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '3.1.0'
-    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.1'
-//    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+//    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.1'
 
     // lombok
     compileOnly 'org.projectlombok:lombok'
