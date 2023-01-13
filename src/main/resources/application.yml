@@ -16,7 +16,7 @@ spring:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://localhost:3306/tk_test?characterEncoding=UTF-8&serverTimezone=UTC
     username: timothy
-    password: 0000
+    password: Timothy@2020
 
 mybatis:
   type-aliases-package: com.timothy20.TKWebCrawler.dto

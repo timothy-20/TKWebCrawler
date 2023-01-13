@@ -56,6 +56,9 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // selenium
+    implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '4.7.2'
 }
 
 apply plugin: "com.github.node-gradle.node"
