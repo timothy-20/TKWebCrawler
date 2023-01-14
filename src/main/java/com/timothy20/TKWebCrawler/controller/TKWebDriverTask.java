@@ -7,48 +7,66 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.io.File;
 import java.net.URLDecoder;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 
-public class TKWebDriver
+public class TKWebDriverTask extends Thread
 {
     @FunctionalInterface
-    interface WebDriverUsageScope
+    public interface CompletionHandler
     {
-        public void operate(ChromeDriver webDriver);
+        void handler(WebDriver webDriver);
     }
 
     private final static String WEB_DRIVER_CLASS = "webdriver.chrome.driver";
-    private ChromeDriver webDriver;
-    private boolean isWebDriverRunning; //
+    private final CompletionHandler completionHandler;
+    private boolean isWorking;
+    private String targetURLString;
 
-    public TKWebDriver()
+    public TKWebDriverTask(CompletionHandler completionHandler)
     {
-        this.isWebDriverRunning = false;
+        this.completionHandler = completionHandler;
+        this.isWorking = false;
+    }
+
+    public synchronized void start(String targetURLString) {
+        this.targetURLString = targetURLString;
+        this.isWorking = true;
+
+        super.start();
+    }
+
+    @Override
+    public void run()
+    {
+        ChromeDriver chromeDriver = null;
 
         try
         {
-            this.webDriver = this.PrepareChromeDriver();
+            if (this.targetURLString == null)
+                throw new RuntimeException("Target url is null");
+
+            chromeDriver = this.PrepareChromeDriver();
+
+            chromeDriver.get(URLDecoder.decode(this.targetURLString, StandardCharsets.UTF_8));
+            this.completionHandler.handler(chromeDriver);
         }
         catch (Exception exception)
         {
             exception.printStackTrace();
         }
+        finally
+        {
+            chromeDriver.quit();
+            this.isWorking = false;
+
+            System.out.println("Crawling is finish!");
+        }
     }
 
-    public boolean IsRunning()
+    public boolean IsWorking()
     {
-        return this.isWebDriverRunning;
-    }
-
-    public void RunWebDriver(String targetURLString, WebDriverUsageScope completionHandler)
-    {
-        this.isWebDriverRunning = true;
-
-        this.webDriver.get(URLDecoder.decode(targetURLString, StandardCharsets.UTF_8));
-        completionHandler.operate(this.webDriver);
-        this.webDriver.quit();
+        return this.isWorking;
     }
 
     // Utils

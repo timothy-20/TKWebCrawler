@@ -23,61 +23,59 @@ import java.util.Map;
 @Controller
 public class TKWebCrawlerController
 {
-    private TKWebDriver webDriver;
+    private final static String TASK_NAME = "TK_WEBDRIVER_TASK";
 
     public TKWebCrawlerController()
     {
-        try
-        {
-            this.webDriver = new TKWebDriver();
-        }
-        catch (RuntimeException exception)
-        {
-            exception.printStackTrace();
-        }
     }
 
     @PostMapping(value = "/receive_target_url")
     public ResponseEntity<Map<String, Object>> ReceiveTargetURLString(@RequestBody String targetURLString)
     {
-        ResponseEntity<Map<String, Object>> response;
-
         try
         {
-            this.webDriver.RunWebDriver(targetURLString, (ChromeDriver chromeDriver) ->
-            {
-                WebElement mainElement = chromeDriver.findElement(By.cssSelector("#main_result_ul"));
-                List<WebElement> mainListElement = mainElement.findElements(By.tagName("li"));
-                List<Map<String, Object>> productInfos = new ArrayList<>();
-
-                for (WebElement element : mainListElement)
-                {
-                    WebElement productDetailElement = element.findElement(By.className("prd-ele"));
-                    WebElement productInfoElement = productDetailElement.findElement(By.className("prd-info"));
-                    String productDetailURLString = productDetailElement.getAttribute("href");
-                    String productBrand = productInfoElement.findElement(By.className("prd-brand")).getText();
-                    String productName = productInfoElement.findElement(By.className("prd-name")).getText();
-                    String productPrice = productInfoElement.findElement(By.className("prd-price")).getText();
-
-                    System.out.println("Product detail url: " + productDetailURLString);
-                    System.out.println("Product brand: " + productBrand);
-                    System.out.println("Product name: " + productName);
-                    System.out.println("Product price: " + productPrice);
-                    System.out.println("==================================================");
-
-                    productInfos.add(Map.of());
-                }
-            });
-
-            response = new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
-        catch (RuntimeException runtimeException)
+        catch (Exception exception)
         {
-            runtimeException.printStackTrace();
+            exception.printStackTrace();
 
-            response = new ResponseEntity<>(Map.of("reason", runtimeException.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(Map.of("reason", exception.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
 
-        return response;
+    private void CrawlingProductDetailURL(String targetURLString)
+    {
+        List<String> productInfoURLs = new ArrayList<>();
+        TKWebDriverTask task = new TKWebDriverTask((WebDriver webDriver) ->
+        {
+            WebElement mainElement = webDriver.findElement(By.cssSelector("#main_result_ul"));
+            List<WebElement> mainListElement = mainElement.findElements(By.tagName("li"));
+
+            for (WebElement element : mainListElement)
+            {
+                WebElement productDetailElement = element.findElement(By.className("prd-ele"));
+                String productDetailURLString = productDetailElement.getAttribute("href");
+
+                System.out.println("Product detail url: " + productDetailURLString);
+                System.out.println("==================================================");
+
+                TKWebDriverTask internalTask = new TKWebDriverTask((WebDriver internalWebDriver) ->
+                {
+
+                });
+
+
+                productInfoURLs.add(productDetailURLString);
+            }
+        });
+
+        task.setName(TASK_NAME);
+        task.start(targetURLString);
+    }
+
+    private void CrawlingProductDetailInformation(String targetURLString)
+    {
+
     }
 }
