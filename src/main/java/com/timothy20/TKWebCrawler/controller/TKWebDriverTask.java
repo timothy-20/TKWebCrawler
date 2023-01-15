@@ -80,7 +80,7 @@ public class TKWebDriverTask extends Thread
 
             chromeOptions.setHeadless(true);
             chromeOptions.setPageLoadStrategy(PageLoadStrategy.NORMAL);
-            chromeOptions.setImplicitWaitTimeout(Duration.ofSeconds(10));
+            chromeOptions.setImplicitWaitTimeout(Duration.ofSeconds(5));
 
             return new ChromeDriver(chromeOptions);
         }

@@ -86,7 +86,17 @@ export default {
     },
 
     getTargetHTML() {
-      axios.post("receive_target_url", this.targetURL).then(response => {
+      let config = {
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+          "Access-Control-Allow-Origin": "*",
+        },
+      };
+      let data = {
+        url: this.targetURL,
+      };
+
+      axios.post("/receive_target_url", data, config).then(response => {
         console.log(response);
 
       }).catch(error => {

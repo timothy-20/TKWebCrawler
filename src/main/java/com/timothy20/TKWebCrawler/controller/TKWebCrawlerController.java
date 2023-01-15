@@ -6,11 +6,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.locators.RelativeLocator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.io.File;
 import java.net.FileNameMap;
 import java.net.URLDecoder;
@@ -19,6 +21,8 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 public class TKWebCrawlerController
@@ -30,10 +34,15 @@ public class TKWebCrawlerController
     }
 
     @PostMapping(value = "/receive_target_url")
-    public ResponseEntity<Map<String, Object>> ReceiveTargetURLString(@RequestBody String targetURLString)
+    public ResponseEntity<Map<String, Object>> ReceiveTargetURLString(@RequestBody Map<String, Object> requestBody)
     {
         try
         {
+            System.out.println(requestBody);
+
+//            this.CrawlingProductDetailURL(targetURLString);
+            this.CrawlingProductDetailInformation((String) requestBody.get("url"));
+
             return new ResponseEntity<>(HttpStatus.OK);
         }
         catch (Exception exception)
@@ -76,6 +85,35 @@ public class TKWebCrawlerController
 
     private void CrawlingProductDetailInformation(String targetURLString)
     {
+        TKWebDriverTask task = new TKWebDriverTask((WebDriver webDriver) ->
+        {
+            WebElement infoElement = webDriver.findElement(By.cssSelector(".wrap-in.info"));
+            String brandName = infoElement.findElement(By.tagName("a")).getText();
+            String code = infoElement.findElement(By.className("end")).getText();
+            String name = infoElement.findElement(By.tagName("h2")).getText();
+            String price = infoElement.findElement(By.className("prd-price")).getText();
+            String tagPrice = null;
+            String salePrice = null;
 
+            System.out.println(brandName);
+            System.out.println(code);
+            System.out.println(name);
+
+            Pattern priceParsePattern = Pattern.compile("[0-9\\,]+(?=\\원)");
+            Matcher priceParseMatcher = priceParsePattern.matcher(price);
+            Integer count = 0;
+
+            while (priceParseMatcher.find())
+            {
+
+                count++;
+            }
+                System.out.println(priceParseMatcher.group());
+
+//            List<WebElement> provisionNoticeElements = webDriver.findElements(By.cssSelector("#gvnt-info li"));
+
+        });
+
+        task.start(targetURLString);
     }
 }
