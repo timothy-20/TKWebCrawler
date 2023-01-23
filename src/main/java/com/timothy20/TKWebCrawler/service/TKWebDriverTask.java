@@ -1,4 +1,4 @@
-package com.timothy20.TKWebCrawler.controller;
+package com.timothy20.TKWebCrawler.service;
 
 import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
@@ -20,18 +20,15 @@ public class TKWebDriverTask extends Thread
 
     private final static String WEB_DRIVER_CLASS = "webdriver.chrome.driver";
     private final CompletionHandler completionHandler;
-    private boolean isWorking;
     private String targetURLString;
 
     public TKWebDriverTask(CompletionHandler completionHandler)
     {
         this.completionHandler = completionHandler;
-        this.isWorking = false;
     }
 
     public synchronized void start(String targetURLString) {
         this.targetURLString = targetURLString;
-        this.isWorking = true;
 
         super.start();
     }
@@ -58,15 +55,7 @@ public class TKWebDriverTask extends Thread
         finally
         {
             chromeDriver.quit();
-            this.isWorking = false;
-
-            System.out.println("Crawling is finish!");
         }
-    }
-
-    public boolean IsWorking()
-    {
-        return this.isWorking;
     }
 
     // Utils

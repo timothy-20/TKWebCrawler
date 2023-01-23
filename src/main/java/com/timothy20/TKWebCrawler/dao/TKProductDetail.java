@@ -1,6 +1,6 @@
 package com.timothy20.TKWebCrawler.dao;
 
-public class TKProductInformation
+public class TKProductDetail
 {
     private String brandName;
     private String name;
@@ -8,7 +8,7 @@ public class TKProductInformation
     private Integer tagPrice;
     private Integer salePrice;
 
-    public TKProductInformation(String brandName, String name, String code, Integer tagPrice, Integer salePrice)
+    public TKProductDetail(String brandName, String name, String code, Integer tagPrice, Integer salePrice)
     {
         this.brandName = brandName;
         this.name = name;
