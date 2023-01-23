@@ -1,22 +1,13 @@
 package com.timothy20.TKWebCrawler.controller;
 
-import com.timothy20.TKWebCrawler.service.TKCrawlingService;
-import com.timothy20.TKWebCrawler.service.TKWebDriverTask;
 import com.timothy20.TKWebCrawler.service.impl.TKCrawlingProductInformationURLImpl;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Controller
 public class TKWebCrawlerController

@@ -7,6 +7,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,20 +25,21 @@ public class TKCrawlingProductDetailServiceImpl implements TKCrawlingService
             String code = infoElement.findElement(By.className("end")).getText();
             String name = infoElement.findElement(By.tagName("h2")).getText();
             String price = infoElement.findElement(By.className("prd-price")).getText();
-            String tagPrice = null;
-            String salePrice = null;
+            Pattern priceParsePattern = Pattern.compile("[0-9\\,]+(?=\\원)");
+            Matcher priceParseMatcher = priceParsePattern.matcher(price);
+            List<String> prices = new ArrayList<>(2);
+
+            while (priceParseMatcher.find())
+                prices.add(priceParseMatcher.group());
+
+            Integer tagPrice = Integer.parseInt(prices.get(prices.size() - 1));
+            Integer salePrice = Integer.parseInt(prices.get(0));
 
             System.out.println(brandName);
             System.out.println(code);
             System.out.println(name);
-
-            Pattern priceParsePattern = Pattern.compile("[0-9\\,]+(?=\\원)");
-            Matcher priceParseMatcher = priceParsePattern.matcher(price);
-
-            while (priceParseMatcher.find())
-            {
-                System.out.println(priceParseMatcher.group());
-            }
+            System.out.println(tagPrice);
+            System.out.println(salePrice);
         });
     }
 }
