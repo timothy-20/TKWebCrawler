@@ -7,27 +7,29 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class TKCrawlingProductInformationURLImpl implements TKCrawlingService
+public class TKCrawlingProductInformationURLImpl implements TKCrawlingService<List<String>>
 {
     @Override
-    public TKWebDriverTask getWebDriverTask()
+    public TKWebDriverTask<List<String>> getWebDriverTask(String targetURLString)
     {
-        return new TKWebDriverTask((WebDriver webDriver) ->
+        return new TKWebDriverTask<>(targetURLString, (WebDriver webDriver) ->
         {
+            List<String> results = new ArrayList<>(100);
             WebElement mainElement = webDriver.findElement(By.cssSelector("#main_result_ul"));
             List<WebElement> mainListElement = mainElement.findElements(By.tagName("li"));
 
             for (WebElement element : mainListElement)
             {
                 WebElement productDetailElement = element.findElement(By.className("prd-ele"));
-                String productDetailURLString = productDetailElement.getAttribute("href");
 
-                System.out.println("Product detail url: " + productDetailURLString);
-                System.out.println("==================================================");
+                results.add(productDetailElement.getAttribute("href"));
             }
+
+            return results;
         });
     }
 }

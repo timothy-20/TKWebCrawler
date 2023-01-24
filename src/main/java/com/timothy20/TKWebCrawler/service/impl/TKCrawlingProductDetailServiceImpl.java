@@ -1,5 +1,6 @@
 package com.timothy20.TKWebCrawler.service.impl;
 
+import com.timothy20.TKWebCrawler.dto.TKProductDetailDTO;
 import com.timothy20.TKWebCrawler.service.TKCrawlingService;
 import com.timothy20.TKWebCrawler.service.TKWebDriverTask;
 import org.openqa.selenium.By;
@@ -13,12 +14,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
-public class TKCrawlingProductDetailServiceImpl implements TKCrawlingService
+public class TKCrawlingProductDetailServiceImpl implements TKCrawlingService<List<TKProductDetailDTO>>
 {
     @Override
-    public TKWebDriverTask getWebDriverTask()
+    public TKWebDriverTask<List<TKProductDetailDTO>> getWebDriverTask(String targetURLString)
     {
-        return new TKWebDriverTask((WebDriver webDriver) ->
+        return new TKWebDriverTask<>(targetURLString, (WebDriver webDriver) ->
         {
             WebElement infoElement = webDriver.findElement(By.cssSelector(".wrap-in.info"));
             String brandName = infoElement.findElement(By.tagName("a")).getText();
@@ -34,12 +35,11 @@ public class TKCrawlingProductDetailServiceImpl implements TKCrawlingService
 
             Integer tagPrice = Integer.parseInt(prices.get(prices.size() - 1));
             Integer salePrice = Integer.parseInt(prices.get(0));
+            List<TKProductDetailDTO> results = new ArrayList<>(1);
 
-            System.out.println(brandName);
-            System.out.println(code);
-            System.out.println(name);
-            System.out.println(tagPrice);
-            System.out.println(salePrice);
+            results.add(new TKProductDetailDTO(brandName, name, code, tagPrice, salePrice));
+
+            return results;
         });
     }
 }

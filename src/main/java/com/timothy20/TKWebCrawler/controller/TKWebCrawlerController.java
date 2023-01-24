@@ -1,5 +1,6 @@
 package com.timothy20.TKWebCrawler.controller;
 
+import com.timothy20.TKWebCrawler.service.TKWebDriverTask;
 import com.timothy20.TKWebCrawler.service.impl.TKCrawlingProductInformationURLImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -7,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.channels.CompletionHandler;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -26,7 +29,11 @@ public class TKWebCrawlerController
     {
         try
         {
-            this.service.getWebDriverTask().start((String) requestBody.get("url"));
+            TKWebDriverTask<List<String>> task = this.service.getWebDriverTask((String) requestBody.get("url"));
+            List<String> urls = task.call();
+
+            System.out.println("Result: " + urls);
+            System.out.println("Result count: " + urls.size());
 
             return new ResponseEntity<>(HttpStatus.OK);
         }

@@ -1,6 +1,6 @@
-package com.timothy20.TKWebCrawler.dao;
+package com.timothy20.TKWebCrawler.dto;
 
-public class TKProductProvisionNotice
+public class TKProductProvisionNoticeDTO
 {
     private String name;
     private String materials;
@@ -9,7 +9,7 @@ public class TKProductProvisionNotice
     private String company;
     private String country;
 
-    public TKProductProvisionNotice(String name, String materials, String color, String sizes, String company, String country)
+    public TKProductProvisionNoticeDTO(String name, String materials, String color, String sizes, String company, String country)
     {
         this.name = name;
         this.materials = materials;

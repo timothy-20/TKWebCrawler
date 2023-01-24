@@ -1,5 +1,7 @@
 package com.timothy20.TKWebCrawler.service;
 
+import dev.failsafe.Call;
+import org.hibernate.mapping.Any;
 import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -9,34 +11,30 @@ import java.io.File;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.List;
+import java.util.concurrent.Callable;
 
-public class TKWebDriverTask extends Thread
+public class TKWebDriverTask <T> implements Callable<T>
 {
     @FunctionalInterface
-    public interface CompletionHandler
-    {
-        void handler(WebDriver webDriver);
-    }
-
+    public interface TKCompletionHandler <T> { T handler(WebDriver webDriver); }
     private final static String WEB_DRIVER_CLASS = "webdriver.chrome.driver";
-    private final CompletionHandler completionHandler;
-    private String targetURLString;
+    private final TKCompletionHandler<T> completionHandler;
+    final private String targetURLString;
 
-    public TKWebDriverTask(CompletionHandler completionHandler)
+    public TKWebDriverTask(String targetURLString, TKCompletionHandler<T> completionHandler)
     {
+        super();
+
+        this.targetURLString = URLDecoder.decode(targetURLString, StandardCharsets.UTF_8);
         this.completionHandler = completionHandler;
     }
 
-    public synchronized void start(String targetURLString) {
-        this.targetURLString = targetURLString;
-
-        super.start();
-    }
-
     @Override
-    public void run()
+    public T call() throws Exception
     {
         ChromeDriver chromeDriver = null;
+        T result = null;
 
         try
         {
@@ -45,8 +43,9 @@ public class TKWebDriverTask extends Thread
 
             chromeDriver = this.PrepareChromeDriver();
 
-            chromeDriver.get(URLDecoder.decode(this.targetURLString, StandardCharsets.UTF_8));
-            this.completionHandler.handler(chromeDriver);
+            chromeDriver.get(this.targetURLString);
+
+            result = this.completionHandler.handler(chromeDriver);
         }
         catch (Exception exception)
         {
@@ -56,6 +55,8 @@ public class TKWebDriverTask extends Thread
         {
             chromeDriver.quit();
         }
+
+        return result;
     }
 
     // Utils

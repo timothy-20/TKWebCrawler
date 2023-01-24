@@ -1,6 +1,6 @@
 package com.timothy20.TKWebCrawler.service;
 
-public interface TKCrawlingService
+public interface TKCrawlingService <T>
 {
-    TKWebDriverTask getWebDriverTask();
+    TKWebDriverTask<T> getWebDriverTask(String targetURLString);
 }
