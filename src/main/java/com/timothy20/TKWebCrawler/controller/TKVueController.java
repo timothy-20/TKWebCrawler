@@ -1,4 +1,4 @@
-package com.timothy20.TKWebCrawler;
+package com.timothy20.TKWebCrawler.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

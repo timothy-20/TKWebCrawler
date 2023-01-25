@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class TKProductInformationURLQueryDTO
 {
     public String urlPath;
-    private Map<String, List<String>> queries;
+    private final Map<String, List<String>> queries;
 
     public TKProductInformationURLQueryDTO(String urlString) throws IOException {
         URL url = new URL(URLDecoder.decode(urlString, StandardCharsets.UTF_8));
@@ -66,15 +66,5 @@ public class TKProductInformationURLQueryDTO
     public Integer getSearchBrandCode()
     {
         return this.parseInteger(this.queries.get("searchBrandLCode").get(0));
-    }
-
-    public void setCategoryNumber(Integer categoryNumber)
-    {
-
-    }
-
-    public String buildURL()
-    {
-        this.queries.keySet().stream();
     }
 }

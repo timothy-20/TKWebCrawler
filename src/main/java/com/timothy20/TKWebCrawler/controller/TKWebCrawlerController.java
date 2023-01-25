@@ -9,19 +9,41 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Controller
 public class TKWebCrawlerController
 {
     private final static String TASK_NAME = "TK_WEBDRIVER_TASK";
-    private TKCrawlingProductInformationURLImpl service;
+    final private TKCrawlingProductInformationURLImpl service;
 
     @Autowired
     public TKWebCrawlerController(TKCrawlingProductInformationURLImpl service)
     {
         this.service = service;
+    }
+
+    private interface TKExceptionFunction<T, R> { R apply(T r) throws Exception; }
+    private static <T, R> Function<T, R> wrap(TKExceptionFunction<T, R> function)
+    {
+        return (T r) ->
+        {
+            try
+            {
+                return function.apply(r);
+            }
+            catch (Exception exception)
+            {
+                throw new RuntimeException(exception);
+            }
+        };
     }
 
     @PostMapping(value = "/receive_target_url")
@@ -33,12 +55,19 @@ public class TKWebCrawlerController
             TKProductInformationURLQueryDTO urlQuery = new TKProductInformationURLQueryDTO(urlString);
 
             TKWebDriverTask<List<String>> task = this.service.getWebDriverTask(urlString);
+            List<TKProductInformationURLQueryDTO> urls = task.call().stream().map(wrap(TKProductInformationURLQueryDTO::new)).toList();
 
-            task.call().forEach((String u) ->
+            ExecutorService executorService = Executors.newCachedThreadPool();
+
+
+            task.call().forEach((String element) ->
             {
 
             });
-//
+
+            ThreadGroup group = new ThreadGroup(Thread.currentThread().getThreadGroup(), "1");
+
+
 //            System.out.println("Result: " + urls);
 //            System.out.println("Result count: " + urls.size());
 
